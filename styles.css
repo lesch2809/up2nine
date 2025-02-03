@@ -1,10 +1,11 @@
 html {
   font-family: Arial, Helvetica, sans-serif;
+
 }
 body {
   margin: 0;
   padding: 0;
-  background-color: #f4f4f4;
+  background-color: #ededed;
 }
 h1 {
   text-align: center;
@@ -24,6 +25,8 @@ td {
 input {
   width: 30px;
   height: 30px;
+  border-radius: 3px;
+  border: 1px solid black;
   text-align: center;
 }
 button {
