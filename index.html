@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sudoku Solver</title>
+    <style>
+        table {
+            border-collapse: collapse;
+        }
+        td {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid black;
+        }
+        input {
+            width: 30px;
+            height: 30px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sudoku Solver</h1>
+    <table id="sudoku-grid">
+        <!-- Generate a 9x9 grid -->
+        <script>
+            for (let i = 0; i < 9; i++) {
+                document.write('<tr>');
+                for (let j = 0; j < 9; j++) {
+                    document.write('<td><input type="text" maxlength="1" id="cell-' + i + '-' + j + '"></td>');
+                }
+                document.write('</tr>');
+            }
+        </script>
+    </table>
+    <button onclick="solveSudoku()">Solve</button>
+    <h1 id="result"></h1>
+
+    <script>
+        function solveSudoku() {
+            let field = Array.from({ length: 9 }, () => Array(9).fill(null));
+
+            // Populate field from the input grid
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    let cellValue = document.getElementById('cell-' + i + '-' + j).value;
+                    if (cellValue) {
+                        field[i][j] = parseInt(cellValue);
+                    } else {
+                        field[i][j] = 0;
+                    }
+                }
+            }
+
+            let iterations = 0;
+            let maxIterations = 200;
+            let solved = false;
+
+            while (iterations < maxIterations && !solved) {
+                solved = solveStep(field);
+                iterations++;
+            }
+
+            if (solved) {
+                // Update the grid with solved values
+                for (let i = 0; i < 9; i++) {
+                    for (let j = 0; j < 9; j++) {
+                        document.getElementById('cell-' + i + '-' + j).value = field[i][j];
+                    }
+                }
+                document.getElementById('result').innerText = "Sudoku solved!";
+            } else {
+                document.getElementById('result').innerText = "Sudoku not solved!";
+            }
+        }
+
+        function solveStep(field) {
+            let changed = false;
+
+            // Check for duplicates in rows, columns, and 3x3 blocks and update possible numbers
+            for (let i = 0; i < 9; i++) {
+                for (let j = 0; j < 9; j++) {
+                    if (field[i][j] === 0) {
+                        let possibleNumbers = getPossibleNumbers(field, i, j);
+                        if (possibleNumbers.length === 1) {
+                            field[i][j] = possibleNumbers[0];
+                            changed = true;
+                        }
+                    }
+                }
+            }
+
+            return !changed;
+        }
+
+        function getPossibleNumbers(field, row, col) {
+            let possibleNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+            for (let i = 0; i < 9; i++) {
+                // Remove numbers already present in the row
+                if (field[row][i] !== 0) {
+                    possibleNumbers = possibleNumbers.filter(num => num !== field[row][i]);
+                }
+                // Remove numbers already present in the column
+                if (field[i][col] !== 0) {
+                    possibleNumbers = possibleNumbers.filter(num => num !== field[i][col]);
+                }
+                // Remove numbers already present in the 3x3 block
+                let blockRow = 3 * Math.floor(row / 3) + Math.floor(i / 3);
+                let blockCol = 3 * Math.floor(col / 3) + i % 3;
+                if (field[blockRow][blockCol] !== 0) {
+                    possibleNumbers = possibleNumbers.filter(num => num !== field[blockRow][blockCol]);
+                }
+            }
+
+            return possibleNumbers;
+        }
+    </script>
+</body>
+</html>
