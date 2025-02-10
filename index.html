@@ -37,7 +37,7 @@
                 for (let i = 0; i < 9; i++) {
                     for (let j = 0; j < 9; j++) {
                         let cellValue = document.getElementById('cell-' + i + '-' + j).value;
-                        if (cellValue) {
+                        if (cellValue && cellValue != 0) {
                             field[i][j] = parseInt(cellValue);
                         } else {
                             field[i][j] = 0;
