@@ -1,3 +1,27 @@
+.header { grid-area: header; }
+.main { grid-area: main; }
+.sidebar-left { 
+  grid-area: sidebar-left; 
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+}
+.sidebar-right { 
+  grid-area: sidebar-right;
+  margin: 10px;
+  padding: 10px;
+  text-align: center;
+}
+
+
+
+.container {
+  display: grid;
+  grid-template-columns: 30% auto 30%;
+  grid-template-areas:
+    'header header header'
+    'sidebar-left main sidebar-right';
+}
 html {
   font-family: Arial, Helvetica, sans-serif;
 
@@ -9,6 +33,9 @@ body {
 }
 h1 {
   text-align: center;
+}
+a{
+  color: rgb(125, 125, 125);
 }
 table {
   border-collapse: collapse;

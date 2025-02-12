@@ -8,115 +8,133 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="styles.css">
 </head>
-<div class="container">
 
-    <body>
-        <header>
+<body>
+    <div class="container">
+
+
+        <div class="header">
             <h1>Up2Nine</h1>
-        </header>
-        <table id="sudoku-grid">
-            <!-- Generate a 9x9 grid -->
-            <script>
-                for (let i = 0; i < 9; i++) {
-                    document.write('<tr>');
-                    for (let j = 0; j < 9; j++) {
-                        document.write('<td><input type="text" maxlength="1" id="cell-' + i + '-' + j + '"onfocus="inFocus(this)" onfocusout="outFocus(this)"></td>');
-                    }
-                    document.write('</tr>');
-                }
-            </script>
-        </table>
-        <button onclick="solveSudoku()">Solve</button>
-        <h1 id="result"></h1>
-
-        <script>
-            function solveSudoku() {
-                let field = Array.from({ length: 9 }, () => Array(9).fill(null));
-
-                // Populate field from the input grid
-                for (let i = 0; i < 9; i++) {
-                    for (let j = 0; j < 9; j++) {
-                        let cellValue = document.getElementById('cell-' + i + '-' + j).value;
-                        if (cellValue && cellValue != 0) {
-                            field[i][j] = parseInt(cellValue);
-                        } else {
-                            field[i][j] = 0;
+        </div>
+        <div class="sidebar-left">
+            <h2>Whats that</h2>
+            <p>Up2Nine is a simple sudoku solver.
+                Just enter the numbers you know and click on solve.
+                The solver will try to solve the sudoku for you.</p>
+        </div>
+        <div class="sidebar-right">
+            <h2>About Me</h2>
+            <p>I am a hobby developer from Switzerland and this is my first project.
+                Here is a link to my <a href="https://github.com/lesch2809/up2nine">GitHub repository</a>. 
+                I enjoy solving puzzles and creating software solutions that can help others. 
+                In my free time, I like to explore new technologies and improve my coding skills. 
+                Feel free to reach out to me on <a href="https://github.com/lesch2809">GitHub</a> if you have any questions or suggestions.
+            </p>
+        </div>
+        <div class="main">
+            <table id="sudoku-grid">
+                <!-- Generate a 9x9 grid -->
+                <script>
+                    for (let i = 0; i < 9; i++) {
+                        document.write('<tr>');
+                        for (let j = 0; j < 9; j++) {
+                            document.write('<td><input type="text" maxlength="1" id="cell-' + i + '-' + j + '"onfocus="inFocus(this)" onfocusout="outFocus(this)"></td>');
                         }
+                        document.write('</tr>');
                     }
-                }
+                </script>
+            </table>
+            <button onclick="solveSudoku()">Solve</button>
+            <h1 id="result"></h1>
 
-                let iterations = 0;
-                let maxIterations = 200;
-                let solved = false;
+            <script>
+                function solveSudoku() {
+                    let field = Array.from({ length: 9 }, () => Array(9).fill(null));
 
-                while (iterations < maxIterations && !solved) {
-                    solved = solveStep(field);
-                    iterations++;
-                }
-
-                if (solved) {
-                    // Update the grid with solved values
+                    // Populate field from the input grid
                     for (let i = 0; i < 9; i++) {
                         for (let j = 0; j < 9; j++) {
-                            document.getElementById('cell-' + i + '-' + j).value = field[i][j];
-                        }
-                    }
-                    document.getElementById('result').innerText = "Sudoku solved!";
-                } else {
-                    document.getElementById('result').innerText = "Sudoku not solved!";
-                }
-            }
-
-            function solveStep(field) {
-                let changed = false;
-
-                // Check for duplicates in rows, columns, and 3x3 blocks and update possible numbers
-                for (let i = 0; i < 9; i++) {
-                    for (let j = 0; j < 9; j++) {
-                        if (field[i][j] === 0) {
-                            let possibleNumbers = getPossibleNumbers(field, i, j);
-                            if (possibleNumbers.length === 1) {
-                                field[i][j] = possibleNumbers[0];
-                                changed = true;
+                            let cellValue = document.getElementById('cell-' + i + '-' + j).value;
+                            if (cellValue && cellValue != 0) {
+                                field[i][j] = parseInt(cellValue);
+                            } else {
+                                field[i][j] = 0;
                             }
                         }
                     }
-                }
 
-                return !changed;
-            }
+                    let iterations = 0;
+                    let maxIterations = 200;
+                    let solved = false;
 
-            function getPossibleNumbers(field, row, col) {
-                let possibleNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-
-                for (let i = 0; i < 9; i++) {
-                    // Remove numbers already present in the row
-                    if (field[row][i] !== 0) {
-                        possibleNumbers = possibleNumbers.filter(num => num !== field[row][i]);
+                    while (iterations < maxIterations && !solved) {
+                        solved = solveStep(field);
+                        iterations++;
                     }
-                    // Remove numbers already present in the column
-                    if (field[i][col] !== 0) {
-                        possibleNumbers = possibleNumbers.filter(num => num !== field[i][col]);
-                    }
-                    // Remove numbers already present in the 3x3 block
-                    let blockRow = 3 * Math.floor(row / 3) + Math.floor(i / 3);
-                    let blockCol = 3 * Math.floor(col / 3) + i % 3;
-                    if (field[blockRow][blockCol] !== 0) {
-                        possibleNumbers = possibleNumbers.filter(num => num !== field[blockRow][blockCol]);
+
+                    if (solved) {
+                        // Update the grid with solved values
+                        for (let i = 0; i < 9; i++) {
+                            for (let j = 0; j < 9; j++) {
+                                document.getElementById('cell-' + i + '-' + j).value = field[i][j];
+                            }
+                        }
+                        document.getElementById('result').innerText = "Sudoku solved!";
+                    } else {
+                        document.getElementById('result').innerText = "Sudoku not solved!";
                     }
                 }
 
-                return possibleNumbers;
-            }
-            function inFocus(x) {
-                x.style.background = "#d3d3d3";
-            }
-            function outFocus(x) {
-                x.style.background = "#ffffff";
-            }
-        </script>
-    </body>
-</div>
+                function solveStep(field) {
+                    let changed = false;
 
+                    // Check for duplicates in rows, columns, and 3x3 blocks and update possible numbers
+                    for (let i = 0; i < 9; i++) {
+                        for (let j = 0; j < 9; j++) {
+                            if (field[i][j] === 0) {
+                                let possibleNumbers = getPossibleNumbers(field, i, j);
+                                if (possibleNumbers.length === 1) {
+                                    field[i][j] = possibleNumbers[0];
+                                    changed = true;
+                                }
+                            }
+                        }
+                    }
+
+                    return !changed;
+                }
+
+                function getPossibleNumbers(field, row, col) {
+                    let possibleNumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+                    for (let i = 0; i < 9; i++) {
+                        // Remove numbers already present in the row
+                        if (field[row][i] !== 0) {
+                            possibleNumbers = possibleNumbers.filter(num => num !== field[row][i]);
+                        }
+                        // Remove numbers already present in the column
+                        if (field[i][col] !== 0) {
+                            possibleNumbers = possibleNumbers.filter(num => num !== field[i][col]);
+                        }
+                        // Remove numbers already present in the 3x3 block
+                        let blockRow = 3 * Math.floor(row / 3) + Math.floor(i / 3);
+                        let blockCol = 3 * Math.floor(col / 3) + i % 3;
+                        if (field[blockRow][blockCol] !== 0) {
+                            possibleNumbers = possibleNumbers.filter(num => num !== field[blockRow][blockCol]);
+                        }
+                    }
+
+                    return possibleNumbers;
+                }
+                function inFocus(x) {
+                    x.style.background = "#d3d3d3";
+                }
+                function outFocus(x) {
+                    x.style.background = "#ffffff";
+                }
+            </script>
+        </div>
+    </div>
+</body>
 
 </html>
